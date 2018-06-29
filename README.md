@@ -3,7 +3,7 @@
 `resc` is a CLI tool that executes remote _bash_ scripts located on Github on your local machine. This allows you to:
 
 - **Share your scripts easily**
-- **Run your scripts from everywhere** (as long as it is a mac or linux machine 😉)
+- **Run your scripts everywhere** (as long as it is a mac or linux machine 😉)
 
 ## Install
 
@@ -40,7 +40,7 @@ This runs the `hello-world` script located in the `JulzDiverse/remote-scripts` r
 
 ## `resc` scripts
 
-`resc` scripts requires one or more top level directories inside a GitHub repository that contain a `run.sh` script, a `.resc` file and a `README.md` file. In case of the `hello-world` script the directory looks like this:
+`resc` scripts require one or more top level directories inside a GitHub repository that contain a `run.sh` script, a `.resc`, and a `README.md` file. In case of the `hello-world` script the directory looks like this:
 
 ```
 .remote-scripts
@@ -50,8 +50,8 @@ This runs the `hello-world` script located in the `JulzDiverse/remote-scripts` r
    └── README.md
 ``` 
 
-- The `directory name` (here `hello-world`) indicates the script
-- The `.resc` is an empty file that indicates that the directoy is a `resc` script
+- The `directory name` (here `hello-world`) indicates the script name
+- The `.resc` is an empty file that indicates that the directoy is a `resc` script directory
 - The `run.sh` is the bash script that is run by `resc`
 - The `README.md` is a Markdown file that provides information for a script (eg description, usage). The `README.md` is processed by the `resc` CLI and should only contain the following markdown syntax:
   - H1 (#)
@@ -90,7 +90,7 @@ $ resc set <github-user|github-org>/<github-repo>
 
 ### ✅  List all available scripts in a resc repository (`list`)
 
-If you want to know what `resc` scripts a repository provides, you can list all of them using `list`. 
+If you want to know which `resc` scripts a repository provides, you can list all of them using `list`. 
 
 If you have set a default repository you can run just:
 
