@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"strings"
 
 	"github.com/JulzDiverse/resc/runner"
@@ -20,6 +21,10 @@ var runCmd = &cobra.Command{
 }
 
 func run(cmd *cobra.Command, args []string) {
+	if len(args) == 0 {
+		exitWithError(errors.New("No script specified"))
+	}
+
 	userRepo, err := cmd.Flags().GetString("repo")
 	exitWithError(err)
 

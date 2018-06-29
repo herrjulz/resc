@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"strings"
 
@@ -17,6 +18,10 @@ var manCmd = &cobra.Command{
 }
 
 func man(cmd *cobra.Command, args []string) {
+	if len(args) == 0 {
+		exitWithError(errors.New("No script specified"))
+	}
+
 	userRepo, err := cmd.Flags().GetString("repo")
 	exitWithError(err)
 

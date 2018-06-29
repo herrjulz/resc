@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
@@ -15,6 +16,10 @@ var printCmd = &cobra.Command{
 }
 
 func print(cmd *cobra.Command, args []string) {
+	if len(args) == 0 {
+		exitWithError(errors.New("No script specified"))
+	}
+
 	userRepo, err := cmd.Flags().GetString("repo")
 	exitWithError(err)
 

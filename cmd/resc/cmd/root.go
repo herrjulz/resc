@@ -15,17 +15,19 @@ var rootCmd = &cobra.Command{
 	Use:     "resc",
 	Short:   "execute remote scripts",
 	Long:    `This tool is executing scripts located on github`,
-	Version: "0.1.0",
+	Version: "0.2.0",
 }
 
 func init() {
 	initRun()
 	initPrint()
 	initMan()
+
 	rootCmd.AddCommand(runCmd)
 	rootCmd.AddCommand(setCmd)
 	rootCmd.AddCommand(printCmd)
 	rootCmd.AddCommand(manCmd)
+	rootCmd.AddCommand(listCmd)
 }
 
 func Execute() {

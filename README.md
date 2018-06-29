@@ -10,7 +10,7 @@
 ### OS X
 
 ```
-$ wget -O /usr/local/bin/resc https://github.com/JulzDiverse/resc/releases/download/v0.1.0/resc-darwin-amd64 && chmod +x /usr/local/bin/resc
+$ wget -O /usr/local/bin/resc https://github.com/JulzDiverse/resc/releases/download/v0.2.0/resc-darwin-amd64 && chmod +x /usr/local/bin/resc
 ```
 
 OR
@@ -25,7 +25,7 @@ $ brew install resc
 ### Linux
 
 ```
-$ wget -O /usr/bin/resc https://github.com/JulzDiverse/resc/releases/download/v0.1.0/resc-linux-amd64 && chmod +x /usr/bin/resc
+$ wget -O /usr/bin/resc https://github.com/JulzDiverse/resc/releases/download/v0.2.0/resc-linux-amd64 && chmod +x /usr/bin/resc
 ```
 
 ## Hello, World! 
@@ -40,16 +40,18 @@ This runs the `hello-world` script located in the `JulzDiverse/remote-scripts` r
 
 ## `resc` scripts
 
-`resc` scripts requires one or more top level directories inside a GitHub repository that contain a `run.sh` script and a `README.md` file. In case of the `hello-world` script the directory looks like this:
+`resc` scripts requires one or more top level directories inside a GitHub repository that contain a `run.sh` script, a `.resc` file and a `README.md` file. In case of the `hello-world` script the directory looks like this:
 
 ```
 .remote-scripts
 └── hello-world 
-   ├── run.sh
+   ├── .resc 
+   ├── run.sh 
    └── README.md
 ``` 
 
 - The `directory name` (here `hello-world`) indicates the script
+- The `.resc` is an empty file that indicates that the directoy is a `resc` script
 - The `run.sh` is the bash script that is run by `resc`
 - The `README.md` is a Markdown file that provides information for a script (eg description, usage). The `README.md` is processed by the `resc` CLI and should only contain the following markdown syntax:
   - H1 (#)
@@ -78,12 +80,28 @@ You can also provide parameters to a script using `--args|-a` option. Try it:
 $ resc run hello-world -r JulzDiverse/remote-scripts -a your-name
 ```
 
-### 🧐 Set base `resc` script repository (`set`) 
+### 🧐 Set default `resc` script repository (`set`) 
 
-You can set a base `resc` script repository, s.t you are not required to specify the repository of a script everytime you execute the `resc run`.
+You can set a default `resc` script repository, s.t you are not required to specify the repository of a script everytime you execute the `resc run`.
 
 ```
 $ resc set <github-user|github-org>/<github-repo>
+```
+
+### ✅  List all available scripts in a resc repository (`list`)
+
+If you want to know what `resc` scripts a repository provides, you can list all of them using `list`. 
+
+If you have set a default repository you can run just:
+
+```
+$ resc list
+```
+
+If you want to list scripts of a specific repository, run:
+
+```
+$ resc list <github-user>/<github-repo>
 ```
 
 ### 📖  Get some script info (`man`) 
