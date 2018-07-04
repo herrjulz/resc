@@ -6,7 +6,9 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 
+	"github.com/JulzDiverse/resc/scriptmanager"
 	"github.com/ghodss/yaml"
 	"github.com/spf13/cobra"
 )
@@ -15,13 +17,15 @@ var rootCmd = &cobra.Command{
 	Use:     "resc",
 	Short:   "execute remote scripts",
 	Long:    `This tool is executing scripts located on github`,
-	Version: "0.2.0",
+	Version: "0.3.0",
 }
 
 func init() {
 	initRun()
 	initPrint()
 	initMan()
+	initSet()
+	initList()
 
 	rootCmd.AddCommand(runCmd)
 	rootCmd.AddCommand(setCmd)
@@ -37,6 +41,32 @@ func Execute() {
 	}
 }
 
+func initScriptManager(url, userRepoString, branchFromFlag string) (*scriptmanager.ScriptManager, string, string, string) {
+	var user, repo, branch string
+	if branchFromFlag == "" {
+		branch = "master"
+	}
+
+	if userRepoString == "" {
+		user, repo, branch = configFromFile()
+	} else {
+		sl := strings.Split(userRepoString, "/")
+		user = sl[0]
+		repo = sl[1]
+	}
+
+	if branchFromFlag != "" {
+		branch = branchFromFlag
+	}
+
+	return scriptmanager.New(
+		url,
+		user,
+		repo,
+		branch,
+	), user, repo, branch
+}
+
 func exitWithError(err error) {
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Exit: %s", err.Error())
@@ -44,7 +74,7 @@ func exitWithError(err error) {
 	}
 }
 
-func configFromFile() (string, string) {
+func configFromFile() (string, string, string) {
 	rc := filepath.Join(os.Getenv("HOME"), ".rsrc")
 	checkIfConfigFileExists(rc)
 
@@ -54,7 +84,7 @@ func configFromFile() (string, string) {
 	config := Config{}
 	err = yaml.Unmarshal(configFile, &config)
 	exitWithError(err)
-	return config.User, config.Repo
+	return config.User, config.Repo, config.Branch
 }
 
 func checkIfConfigFileExists(rc string) {

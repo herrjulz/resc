@@ -9,25 +9,31 @@ import (
 )
 
 type ScriptManager struct {
-	url  string
-	user string
-	repo string
+	url    string
+	user   string
+	repo   string
+	branch string
 }
 
-func New(url, user, repo string) *ScriptManager {
+func New(url, user, repo, branch string) *ScriptManager {
 	return &ScriptManager{
-		url:  url,
-		user: user,
-		repo: repo,
+		url:    url,
+		user:   user,
+		repo:   repo,
+		branch: branch,
 	}
 }
 
-func (s *ScriptManager) GetScript(scriptName string) ([]byte, error) {
-	return getter(fmt.Sprintf("%s/%s/%s/master/%s/run.sh", s.url, s.user, s.repo, scriptName))
+func (s *ScriptManager) Get(scriptName string) ([]byte, error) {
+	return getter(fmt.Sprintf("%s/%s/%s/%s/%s/run.sh", s.url, s.user, s.repo, s.branch, scriptName))
+}
+
+func (s *ScriptManager) GetScript(scriptPath string) ([]byte, error) {
+	return getter(fmt.Sprintf("%s/%s/%s/%s/%s", s.url, s.user, s.repo, s.branch, scriptPath))
 }
 
 func (s *ScriptManager) GetReadmeForScript(scriptName string) ([]byte, error) {
-	return getter(fmt.Sprintf("%s/%s/%s/master/%s/README.md", s.url, s.user, s.repo, scriptName))
+	return getter(fmt.Sprintf("%s/%s/%s/%s/%s/README.md", s.url, s.user, s.repo, s.branch, scriptName))
 }
 
 func getter(url string) ([]byte, error) {

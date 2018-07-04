@@ -10,7 +10,7 @@
 ### OS X
 
 ```
-$ wget -O /usr/local/bin/resc https://github.com/JulzDiverse/resc/releases/download/v0.2.0/resc-darwin-amd64 && chmod +x /usr/local/bin/resc
+$ wget -O /usr/local/bin/resc https://github.com/JulzDiverse/resc/releases/download/v0.3.0/resc-darwin-amd64 && chmod +x /usr/local/bin/resc
 ```
 
 OR
@@ -25,7 +25,7 @@ $ brew install resc
 ### Linux
 
 ```
-$ wget -O /usr/bin/resc https://github.com/JulzDiverse/resc/releases/download/v0.2.0/resc-linux-amd64 && chmod +x /usr/bin/resc
+$ wget -O /usr/bin/resc https://github.com/JulzDiverse/resc/releases/download/v0.3.0/resc-linux-amd64 && chmod +x /usr/bin/resc
 ```
 
 ## Hello, World! 
@@ -68,16 +68,22 @@ Running a `resc` script is nothing more than:
 $ resc run <script-name> --repo <github-user|github-org>/<github-repo>
 ```
 
-or if you have set a repository, it's even simpler:
+or if you have set a default repository, it's even simpler:
 
 ```
 $ resc run <script-name>
 ```
 
-You can also provide parameters to a script using `--args|-a` option. Try it:
+You can provide parameters to a script using `--args|-a` option. Try it:
 
 ```
 $ resc run hello-world -r JulzDiverse/remote-scripts -a your-name
+```
+
+You can also run a specific script located anywhere in a repository by providing the path to the script:
+
+```bash
+$ resc run -s <path/to/script.sh> -r JulzDiverse/remote-scripts
 ```
 
 ### 🧐 Set default `resc` script repository (`set`) 
@@ -94,13 +100,13 @@ If you want to know which `resc` scripts a repository provides, you can list all
 
 If you have set a default repository you can run just:
 
-```
+```bash
 $ resc list
 ```
 
 If you want to list scripts of a specific repository, run:
 
-```
+```bash
 $ resc list <github-user>/<github-repo>
 ```
 
@@ -108,7 +114,7 @@ $ resc list <github-user>/<github-repo>
 
 If you want to know what a script does before you run it, you can check the provided README by calling `man`:
 
-```
+```bash
 $ resc man <script-name> 
 ```
 
@@ -116,15 +122,34 @@ $ resc man <script-name>
 
 If you want to see what a script exactly does or you want to save it to your local machine, you can use the `print` command:
 
-```
+```bash
 $ resc print <script-name>
 ```
 
 to save a script, pipe it to a file:
 
-```
+```bash
 $ resc print <script-name> > script.sh
 ```
+
+### 🌿  Specifing a Branch
+
+Each `resc` command has the `--branch|-b` option, where you can specify a specific branch of a repository you want to use to execute a script. For example:
+
+```
+$ resc run hello-world -r JulzDiverse/remote-scripts -b develop
+```
+
+The default branch used is always `master`. You can, however, set a default branch if required:
+
+```bash
+# if you have set your defaults already: 
+$ resc set -b develop
+
+# if you haven't set your defaults:
+$ resc set <owner>/<repo> -b develop
+```
+
 
 ## 💻  Development 
 

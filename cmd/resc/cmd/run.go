@@ -4,24 +4,28 @@ import (
 	"errors"
 	"strings"
 
+	"github.com/JulzDiverse/resc/models/github"
 	"github.com/JulzDiverse/resc/runner"
-	"github.com/JulzDiverse/resc/scriptmanager"
 	"github.com/spf13/cobra"
 )
 
 type Config struct {
-	User string `yaml:"user"`
-	Repo string `yaml:"repo"`
+	User   string `yaml:"user"`
+	Repo   string `yaml:"repo"`
+	Branch string `yaml:"branch"`
 }
 
 var runCmd = &cobra.Command{
-	Use:   "run",
+	Use:   "run <script-name>",
 	Short: "run a remote script",
 	Run:   run,
 }
 
 func run(cmd *cobra.Command, args []string) {
-	if len(args) == 0 {
+	scriptPath, err := cmd.Flags().GetString("script")
+	exitWithError(err)
+
+	if len(args) == 0 && scriptPath == "" {
 		exitWithError(errors.New("No script specified"))
 	}
 
@@ -31,32 +35,28 @@ func run(cmd *cobra.Command, args []string) {
 	argsString, err := cmd.Flags().GetString("args")
 	exitWithError(err)
 
-	runArgs := strings.Split(argsString, " ")
-
-	var user, repo string
-	if userRepo == "" {
-		user, repo = configFromFile()
-	} else {
-		sl := strings.Split(userRepo, "/")
-		user = sl[0]
-		repo = sl[1]
-	}
-
-	runner := runner.New(runner.Default)
-	scriptManager := scriptmanager.New(
-		"https://raw.githubusercontent.com",
-		user,
-		repo,
-	)
-
-	script, err := scriptManager.GetScript(args[0])
+	branch, err := cmd.Flags().GetString("branch")
 	exitWithError(err)
 
+	scriptManager, _, _, _ := initScriptManager(github.RawContentUrl, userRepo, branch)
+	runner := runner.New(runner.Default)
+
+	var script []byte
+	if scriptPath == "" {
+		script, err = scriptManager.Get(args[0])
+		exitWithError(err)
+	} else {
+		script, err = scriptManager.GetScript(scriptPath)
+	}
+
+	runArgs := strings.Split(argsString, " ")
 	_, err = runner.Run(string(script), runArgs...)
 	exitWithError(err)
 }
 
 func initRun() {
-	runCmd.Flags().StringP("repo", "r", "", "name of the repository containing the script. Pattern: <user|org>/<repo>")
+	runCmd.Flags().StringP("repo", "r", "", "name of the repository containing the script. Pattern: <owner>/<repo>")
+	runCmd.Flags().StringP("branch", "b", "", "branch of the repository containing the script. Default: master")
+	runCmd.Flags().StringP("script", "s", "", "path to a specific script file in the specified repository (eg topDir/subDir/script.sh)")
 	runCmd.Flags().StringP("args", "a", "", "space separated list of arguments: eg '-c config -v var'")
 }

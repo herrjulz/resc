@@ -13,9 +13,9 @@ import (
 var _ = Describe("List", func() {
 
 	var (
-		scriptManager   *ScriptManager
-		fakeServer      *ghttp.Server
-		url, user, repo string
+		scriptManager           *ScriptManager
+		fakeServer              *ghttp.Server
+		url, user, repo, branch string
 	)
 
 	BeforeEach(func() {
@@ -23,10 +23,11 @@ var _ = Describe("List", func() {
 		url = fakeServer.URL()
 		user = "zeus"
 		repo = "pandora"
+		branch = "master"
 	})
 
 	JustBeforeEach(func() {
-		scriptManager = New(url, user, repo)
+		scriptManager = New(url, user, repo, branch)
 	})
 
 	Context("listing available scripts in a repository", func() {
