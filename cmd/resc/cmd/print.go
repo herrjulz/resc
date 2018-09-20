@@ -15,10 +15,6 @@ var printCmd = &cobra.Command{
 }
 
 func print(cmd *cobra.Command, args []string) {
-	if len(args) == 0 {
-		exitWithError(errors.New("No script specified"))
-	}
-
 	userRepo, err := cmd.Flags().GetString("repo")
 	exitWithError(err)
 
@@ -32,6 +28,9 @@ func print(cmd *cobra.Command, args []string) {
 
 	var script []byte
 	if scriptPath == "" {
+		if len(args) == 0 {
+			exitWithError(errors.New("No script specified"))
+		}
 		script, err = scriptManager.Get(args[0])
 		exitWithError(err)
 	} else {
@@ -44,4 +43,5 @@ func print(cmd *cobra.Command, args []string) {
 func initPrint() {
 	printCmd.Flags().StringP("repo", "r", "", "name of the repository containing the script. Pattern: <owner>/<repo>")
 	printCmd.Flags().StringP("branch", "b", "", "branch of the repository containing the script. Default: master")
+	printCmd.Flags().StringP("script", "s", "", "path to a specific script file in the specified repository (eg topDir/subDir/script.sh)")
 }
