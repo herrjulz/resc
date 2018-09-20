@@ -10,7 +10,7 @@
 ### OS X
 
 ```
-$ wget -O /usr/local/bin/resc https://github.com/JulzDiverse/resc/releases/download/v0.3.0/resc-darwin-amd64 && chmod +x /usr/local/bin/resc
+$ wget -O /usr/local/bin/resc https://github.com/JulzDiverse/resc/releases/download/v0.4.0/resc-darwin-amd64 && chmod +x /usr/local/bin/resc
 ```
 
 OR
@@ -25,7 +25,7 @@ $ brew install resc
 ### Linux
 
 ```
-$ wget -O /usr/bin/resc https://github.com/JulzDiverse/resc/releases/download/v0.3.0/resc-linux-amd64 && chmod +x /usr/bin/resc
+$ wget -O /usr/bin/resc https://github.com/JulzDiverse/resc/releases/download/v0.4.0/resc-linux-amd64 && chmod +x /usr/bin/resc
 ```
 
 ## Hello, World! 
